@@ -1,0 +1,23 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+.venv
+
+# --- Database (SQLite) ---
+backend/data/*.sqlite
+backend/data/*.db
+
+# --- IDEs e Editores ---
+.vscode/
+.idea/
+Thumbs.db (Windows)
+
+# --- Logs ---
+*.log
