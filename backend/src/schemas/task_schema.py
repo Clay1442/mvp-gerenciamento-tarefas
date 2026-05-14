@@ -15,6 +15,7 @@ class TaskUpdate(BaseModel):
 
 class TaskResponse(BaseModel):
     id: int
+    title: str
     status: bool
 
     # This allows Pydantic to work with Objects and not just dicts
