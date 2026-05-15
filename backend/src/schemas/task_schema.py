@@ -1,9 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from enums.TaskStatus import TaskStatus
 from typing import Optional
 
 class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
+    status: TaskStatus = TaskStatus.PENDENTE
 
 class TaskCreate(TaskBase):
     pass
@@ -11,13 +13,13 @@ class TaskCreate(TaskBase):
 class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
-    status: Optional[bool] = None
+    status: Optional[TaskStatus] = None 
 
 class TaskResponse(BaseModel):
     id: int
     title: str
-    status: bool
+    status: TaskStatus
+
 
     # This allows Pydantic to work with Objects and not just dicts
-    class config:
-        from_attribute = True       
+    model_config = ConfigDict(from_attributes=True)

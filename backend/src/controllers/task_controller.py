@@ -13,7 +13,7 @@ def create(request: TaskCreate, db: Session = Depends(get_db)):
     return TaskService.create_task(db, request)
 
 #Building the endpoint to find all tasks
-@router.get("find all/", response_model=List[TaskResponse])
+@router.get("/find all", response_model=List[TaskResponse])
 def find_all(db: Session = Depends(get_db)):
     return TaskService.find_all(db)
 
