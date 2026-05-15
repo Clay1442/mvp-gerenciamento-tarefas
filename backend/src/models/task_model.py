@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, Enum 
-from enums import TaskStatus
+from enums.TaskStatus import TaskStatus
 from database import Base
 
 class Task(Base):
