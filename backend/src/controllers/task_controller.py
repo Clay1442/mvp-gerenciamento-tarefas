@@ -19,7 +19,7 @@ def find_all(db: Session = Depends(get_db)):
 
 #Building the endpoint to find one task
 @router.get("/", response_model=TaskResponse)
-def find_by_id(task_id = int ,db: Session = Depends(get_db)):
+def find_by_id(task_id: int ,db: Session = Depends(get_db)):
     return TaskService.find_by_id(db, task_id)
 
 #Building the endpoint to update task
