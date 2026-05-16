@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-baseURL: (import.meta.env['VITE_API_URL'] as string) || 'http://localhost:8000',
+baseURL: ((import.meta as any).env['VITE_API_URL'] as string) || 'http://localhost:8000',
 });
 
 // Add a request interceptor to include the token in the Authorization header
