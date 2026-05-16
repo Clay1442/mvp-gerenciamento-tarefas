@@ -2,20 +2,38 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useEffect, useState } from 'react';
 import './Board.css';
 import { getTasks, createTask, updateTaskStatus, deleteTask } from '../services/taskService';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+interface Task {
+  id: number;
+  title: string;
+  description?: string;
+  status: string;
+}
 
 function Board() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Get the signOut function and user data from the AuthContext
+  const { signOut, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    signOut();
+    navigate('/'); 
+  };
 
   //States for editing a task
-  const [editingTask, setEditingTask] = useState(null); // Armazena a task clicada
+  const [editingTask, setEditingTask] = useState<Task | null>(null); // Armazena a task clicada
   const [editTitle, setEditTitle] = useState('');
   const [editDesc, setEditDesc] = useState('');
   const [editStatus, setEditStatus] = useState('');
 
-  const handleCardClick = (task) => {
+  const handleCardClick = (task: Task) => {
     setEditingTask(task);
     setEditTitle(task.title);
     setEditDesc(task.description || '');
@@ -23,8 +41,10 @@ function Board() {
   };
 
   //Function to save the edited task
-  const handleSaveEdit = async (e) => {
-    e.preventDefault();
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingTask) return;
+    
     try {
       await updateTaskStatus(editingTask.id, editStatus); 
       
@@ -46,6 +66,7 @@ function Board() {
   
   //Function to handle task deletion
   const handleDelete = async () => {
+  if (!editingTask) return;
   if (!window.confirm("Tem certeza que deseja apagar esta tarefa permanentemente?")) return;
 
   try {
@@ -60,7 +81,7 @@ function Board() {
 
 
   //Function to update the status
-  const handleStatusChange = async (taskId, newStatus) => {
+  const handleStatusChange = async (taskId: number, newStatus: string) => {
     try {
       await updateTaskStatus(taskId, newStatus);     
       //Update the local state to reflect the status change without needing to refetch all tasks
@@ -76,7 +97,7 @@ function Board() {
   };
 
   //function to create a new task
-  const handleCreateTask = async (e) => {
+  const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if(!newTitle.trim()) return alert("O título é obrigatório!")
@@ -113,7 +134,7 @@ function Board() {
   }, []);
 
   // Function to handle drag and drop end
-  const onDragEnd = async (result) => {
+  const onDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result;
 
     // 1. Se o usuário soltou o card fora de qualquer coluna, não faz nada
@@ -152,7 +173,7 @@ function Board() {
   const inProgressTasks = tasks.filter(t => t.status === 'EM_PROGRESSO');
   const completedTasks = tasks.filter(t => t.status === 'CONCLUIDO');
 
-  const renderCard = (task) => (
+  const renderCard = (task: Task) => (
     <div key={task.id} className="card" onClick={() => handleCardClick(task)}>
       <h4>{task.title}</h4>
       {task.description && <p style={{ fontSize: '13px', color: '#eaeaea' }}>. . . </p>}
@@ -163,9 +184,8 @@ function Board() {
   );
 
 return ( 
-<DragDropContext onDragEnd={onDragEnd}>
-    <div className="board">
-      
+<DragDropContext onDragEnd={onDragEnd}> 
+    <div className="board">    
       {/* COLUNA PENDENTE */}
       <Droppable droppableId="PENDENTE">
         {(provided) => (
@@ -174,7 +194,7 @@ return (
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <h2>Pendente 🟡</h2>
+            <h2>Pendente</h2>
             {pendingTasks.map((task, index) => (
               <Draggable key={task.id} draggableId={String(task.id)} index={index}>
                 {(provided) => (
@@ -185,9 +205,9 @@ return (
                     {...provided.dragHandleProps}
                   >
                     <h4 
-                       onClick={() => handleCardClick(task)}
-                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
-                       >
+                      onClick={() => handleCardClick(task)}
+                      style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                      >
                         {task.title}
                     </h4>
                     <span className={`status-badge ${task.status.toLowerCase()}`}>🟡 Pendente</span>
@@ -208,7 +228,7 @@ return (
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <h2>Em Progresso 🔵</h2>
+            <h2>Em Progresso</h2>
             {inProgressTasks.map((task, index) => (
               <Draggable key={task.id} draggableId={String(task.id)} index={index}>
                 {(provided) => (
@@ -219,9 +239,9 @@ return (
                     {...provided.dragHandleProps}
                   >
                     <h4 
-                       onClick={() => handleCardClick(task)}
-                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
-                       >
+                      onClick={() => handleCardClick(task)}
+                      style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                      >
                         {task.title}
                     </h4>
                     <span className={`status-badge ${task.status.toLowerCase()}`}>🔵 Em Progresso</span>
@@ -242,7 +262,7 @@ return (
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <h2>Concluído 🟢</h2>
+            <h2>Concluído</h2>
             {completedTasks.map((task, index) => (
               <Draggable key={task.id} draggableId={String(task.id)} index={index}>
                 {(provided) => (
@@ -253,9 +273,9 @@ return (
                     {...provided.dragHandleProps}
                   >
                     <h4 
-                       onClick={() => handleCardClick(task)}
-                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
-                       >
+                      onClick={() => handleCardClick(task)}
+                      style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                      >
                         {task.title}
                     </h4>
                     <span className={`status-badge ${task.status.toLowerCase()}`}>🟢 Concluído</span>
@@ -268,8 +288,14 @@ return (
         )}
       </Droppable>
 
-            {/*Button add task */}
+      {/*Button add task */}
       <button className="fab-button" onClick={() => setIsModalOpen(true)}>+ Adicionar Tarefa</button>
+
+      <div className="back-floating-container" data-tooltip="Retornar para tela de login">
+          <button className="back-floating-button" onClick={handleLogout}>
+            ←
+          </button>
+        </div>
 
       {/* Edit Task Modal */}
       {editingTask && (
@@ -281,7 +307,7 @@ return (
               <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
 
               <label>Descrição:</label>
-              <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} rows="4" />
+              <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} rows={4} />
 
               <label>Status atual:</label>
               <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)}>

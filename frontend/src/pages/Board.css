@@ -213,9 +213,68 @@
   background-color: #dc2626; /* Vermelho mais escuro no hover */
 }
 
-/* ==========================================
-   CONFIGURAÇÕES PARA DISPOSITIVOS MÓVEIS
-   ========================================== */
+/* Container que fixa a estrutura no canto inferior esquerdo */
+.back-floating-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 999;
+  display: inline-block;
+}
+
+/* O Botão Redondo com a Setinha */
+.back-floating-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #1a202c; /* Cor escura combinando com seus botões */
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efeito de Hover no Botão */
+.back-floating-button:hover {
+  background-color: #ff4d4d; /* Fica vermelho indicando saída */
+  transform: scale(1.1); /* Dá um leve zoom magnético */
+}
+
+/* Cria o balãozinho de texto escondido por padrão */
+.back-floating-container::after {
+  content: attr(data-tooltip); /* Puxa o texto do HTML automaticamente */
+  position: absolute;
+  bottom: 60px; /* Joga o texto logo acima do botão */
+  left: 0;
+  white-space: nowrap;
+  background-color: #2d3748;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Quando passa o mouse no container, o balão aparece subindo suavemente */
+.back-floating-container:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
   
   /* 1. Transforma o Board em vertical */
