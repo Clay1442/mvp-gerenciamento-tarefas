@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  
-from database import Base, engine
-from models import task_model, user_model
-from controllers import task_controller, auth_controller
+from src.database import Base, engine
+from src.models import task_model, user_model
+from src.controllers import task_controller, auth_controller
 
 #this will create the database and tables if they don't exist
 Base.metadata.create_all(bind=engine)

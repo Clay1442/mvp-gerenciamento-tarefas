@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
-from models.task_model import Task
-from schemas.task_schema import TaskCreate, TaskUpdate
+from src.models.task_model import Task
+from src.schemas.task_schema import TaskCreate, TaskUpdate
 from fastapi import HTTPException
-from repositories.task_repository import TaskRepository
+from src.repositories.task_repository import TaskRepository
 from fastapi import status
-from utils.security import get_current_user
-from models.user_model import UserModel
+from src.utils.security import get_current_user
+from src.models.user_model import UserModel
 
 class TaskService:
 

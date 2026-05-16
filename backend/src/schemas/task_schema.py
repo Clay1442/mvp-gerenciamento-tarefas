@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from enums.TaskStatus import TaskStatus
+from src.enums.TaskStatus import TaskStatus
 from typing import Optional
 
 class TaskBase(BaseModel):

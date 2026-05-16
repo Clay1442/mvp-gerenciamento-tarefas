@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 
+load_dotenv()  # Load environment variables from .env file
+
 #Where the database will be stored
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///../data/database.sqlite")
 

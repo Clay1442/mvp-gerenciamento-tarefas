@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from enums.TaskStatus import TaskStatus
-from database import Base
+from src.enums.TaskStatus import TaskStatus
+from src.database import Base
 
 class Task(Base):
     __tablename__ = 'tasks'

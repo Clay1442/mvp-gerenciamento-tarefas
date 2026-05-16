@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.task_model import Task
+from src.models.task_model import Task
 
 class TaskRepository:
     @staticmethod

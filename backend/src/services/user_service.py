@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.user_model import UserModel
-from schemas.user_schema import UserCreate, LoginRequest, TokenResponse
-from repositories.user_repository import UserRepository # Importa o repositório
-from utils.security import get_password_hash, verify_password, create_access_token
+from src.models.user_model import UserModel
+from src.schemas.user_schema import UserCreate, LoginRequest, TokenResponse
+from src.repositories.user_repository import UserRepository # Importa o repositório
+from src.utils.security import get_password_hash, verify_password, create_access_token
 
 class UserService:
     #Verification if the email is already registered
