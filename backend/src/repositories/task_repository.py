@@ -11,13 +11,13 @@ class TaskRepository:
 
 
     @staticmethod
-    def find_all(db: Session):
-        return db.query(Task).all()
+    def find_all_by_user(db: Session, user_id: int):
+        return db.query(Task).filter(Task.user_id == user_id).all()
 
     @staticmethod
-    def find_by_id(db: Session, task_id: int):
-        return db.query(Task).filter(Task.id == task_id).first()    
-    
+    def find_by_id_and_user(db: Session, task_id: int, user_id: int):
+        return db.query(Task).filter(Task.id == task_id, Task.user_id == user_id).first()
+
     @staticmethod
     def delete(db: Session, task: Task):
         db.delete(task)

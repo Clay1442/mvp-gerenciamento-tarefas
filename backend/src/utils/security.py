@@ -1,6 +1,12 @@
+from datetime import datetime, timedelta, timezone
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from database import get_db
+from models.user_model import UserModel
+from repositories.user_repository import UserRepository
 import jwt
 import bcrypt
-from datetime import datetime, timedelta, timezone
 
 # Function to hash a plain password
 def get_password_hash(password: str) -> str:
@@ -44,3 +50,35 @@ def create_access_token(data: dict) -> str:
     # Encode the token using the secret key and algorithm
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+# Define the OAuth2 scheme for token extraction from requests
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+
+# Function to decode and verify a JWT token
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> UserModel:
+
+    # Define a common exception for invalid credentials to avoid repetition   
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Token de autenticação inválido ou expirado.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    try:
+        # Decode the JWT token to extract the payload
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        
+        if email is None:
+            raise credentials_exception
+            
+    except jwt.PyJWTError:
+        raise credentials_exception
+
+    #Find the user in the database using the email extracted from the token
+    user = UserRepository.get_user_by_email(email, db)
+    if user is None:
+        raise credentials_exception
+
+    #return the user object if the token is valid and the user exists
+    return user
