@@ -13,14 +13,15 @@ app = FastAPI()
 #CORS configuration
 origins = [
     "http://localhost:5173",
+    "https://mvp-gerenciamento-tarefas.vercel.app"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"], # Permite GET, POST, PUT, DELETE, etc.
-    allow_headers=["*"], # Permite todos os cabeçalhos
+    allow_methods=["*"], 
+    allow_headers=["*"],
 )
 
 #Import Routers
