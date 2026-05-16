@@ -1,15 +1,7 @@
 import axios from 'axios';
 
-interface ImportMetaEnv {
-  readonly VITE_API_URL?: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
-
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+baseURL: (import.meta.env['VITE_API_URL'] as string) || 'http://localhost:8000',
 });
 
 // Add a request interceptor to include the token in the Authorization header
