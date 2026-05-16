@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  
-from database import engine
-from models import task_model
-from controllers import task_controller
+from database import Base, engine
+from models import task_model, user_model
+from controllers import task_controller, auth_controller
 
 #this will create the database and tables if they don't exist
-task_model.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -25,3 +25,4 @@ app.add_middleware(
 
 #Import Routers
 app.include_router(task_controller.router)
+app.include_router(auth_controller.router)

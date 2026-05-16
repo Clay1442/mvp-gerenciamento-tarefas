@@ -212,3 +212,45 @@
 .delete-btn:hover {
   background-color: #dc2626; /* Vermelho mais escuro no hover */
 }
+
+/* ==========================================
+   CONFIGURAÇÕES PARA DISPOSITIVOS MÓVEIS
+   ========================================== */
+@media (max-width: 768px) {
+  
+  /* 1. Transforma o Board em vertical */
+  .board {
+    flex-direction: column;
+    align-items: center; /* Centraliza as colunas na tela do celular */
+    justify-content: flex-start;
+    gap: 25px; /* Aumenta um pouco o espaçamento entre as colunas */
+    padding: 15px;
+    overflow-x: hidden; /* Evita que a tela fique dançando para os lados */
+  }
+
+  /* 2. Faz as colunas ocuparem quase toda a largura da tela */
+  .column {
+    width: 100%;
+    max-width: 360px; /* Impede que fiquem largas demais em celulares grandes */
+    min-height: 200px; /* Dá uma altura mínima caso a coluna esteja vazia */
+  }
+
+  /* 3. Ajusta o tamanho dos modais para não cortarem nas bordas */
+  .modal-content {
+    width: 90%; /* Deixa 5% de margem em cada lado */
+    padding: 15px;
+  }
+
+  /* 4. Ajusta o botão flutuante para não atrapalhar o conteúdo */
+  .fab-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 0 18px;
+    height: 50px;
+    font-size: 14px;
+  }
+  
+  .fab-button span {
+    font-size: 20px;
+  }
+}

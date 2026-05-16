@@ -1,3 +1,4 @@
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useEffect, useState } from 'react';
 import './Board.css';
 import { getTasks, createTask, updateTaskStatus, deleteTask } from '../services/taskService';
@@ -111,6 +112,41 @@ function Board() {
     }).catch(err => console.error("Erro ao buscar tarefas", err));
   }, []);
 
+  // Function to handle drag and drop end
+  const onDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+
+    // 1. Se o usuário soltou o card fora de qualquer coluna, não faz nada
+    if (!destination) return;
+
+    // 2. Se o usuário soltou o card na mesma coluna e na mesma posição de antes, não faz nada
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    // O draggableId vem como string da biblioteca, vamos converter para número se o seu ID for int
+    const taskId = Number(draggableId);
+    const newStatus = destination.droppableId; // O id da coluna destino será 'PENDENTE', 'EM_PROGRESSO', etc.
+
+    try {
+      //update the task status in the backend  
+      await updateTaskStatus(taskId, newStatus);
+
+      // 4. Atualiza o estado no Frontend para mover o card visualmente
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === taskId ? { ...task, status: newStatus } : task
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar status via Drag and Drop:", error);
+      alert("Não foi possível salvar o movimento da tarefa.");
+    }
+  };
+
   // Filtering tasks into columns, like in Trello.
   const pendingTasks = tasks.filter(t => t.status === 'PENDENTE');
   const inProgressTasks = tasks.filter(t => t.status === 'EM_PROGRESSO');
@@ -126,24 +162,113 @@ function Board() {
     </div>
   );
 
-  return (
-<div className="board">
-      <div className="column">
-        <h2>Pendente 🟡</h2>
-        {tasks.filter(t => t.status === 'PENDENTE').map(renderCard)}
-      </div>
+return ( 
+<DragDropContext onDragEnd={onDragEnd}>
+    <div className="board">
       
-      <div className="column">
-        <h2>Em Progresso 🔵</h2>
-        {tasks.filter(t => t.status === 'EM_PROGRESSO').map(renderCard)}
-      </div>
+      {/* COLUNA PENDENTE */}
+      <Droppable droppableId="PENDENTE">
+        {(provided) => (
+          <div 
+            className="column"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <h2>Pendente 🟡</h2>
+            {pendingTasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={String(task.id)} index={index}>
+                {(provided) => (
+                  <div
+                    className="card"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <h4 
+                       onClick={() => handleCardClick(task)}
+                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                       >
+                        {task.title}
+                    </h4>
+                    <span className={`status-badge ${task.status.toLowerCase()}`}>🟡 Pendente</span>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder} {/* Evita que a coluna encolha ao arrastar */}
+          </div>
+        )}
+      </Droppable>
 
-      <div className="column">
-        <h2>Concluído 🟢</h2>
-        {tasks.filter(t => t.status === 'CONCLUIDO').map(renderCard)}
-      </div>
-      
-      {/*Button add task */}
+      {/* COLUNA EM PROGRESSO */}
+      <Droppable droppableId="EM_PROGRESSO">
+        {(provided) => (
+          <div 
+            className="column"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <h2>Em Progresso 🔵</h2>
+            {inProgressTasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={String(task.id)} index={index}>
+                {(provided) => (
+                  <div
+                    className="card"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <h4 
+                       onClick={() => handleCardClick(task)}
+                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                       >
+                        {task.title}
+                    </h4>
+                    <span className={`status-badge ${task.status.toLowerCase()}`}>🔵 Em Progresso</span>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
+      {/* COLUNA CONCLUÍDO */}
+      <Droppable droppableId="CONCLUIDO">
+        {(provided) => (
+          <div 
+            className="column"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <h2>Concluído 🟢</h2>
+            {completedTasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={String(task.id)} index={index}>
+                {(provided) => (
+                  <div
+                    className="card"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <h4 
+                       onClick={() => handleCardClick(task)}
+                       style={{ cursor: 'pointer', width: '100%', display: 'block' }}
+                       >
+                        {task.title}
+                    </h4>
+                    <span className={`status-badge ${task.status.toLowerCase()}`}>🟢 Concluído</span>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
+            {/*Button add task */}
       <button className="fab-button" onClick={() => setIsModalOpen(true)}>+ Adicionar Tarefa</button>
 
       {/* Edit Task Modal */}
@@ -179,8 +304,6 @@ function Board() {
       )}
 
 
-
-
       {/*Modal add task form */}
       {isModalOpen && (
         <div className="modal-overlay">
@@ -208,7 +331,8 @@ function Board() {
         </div>
       )}
     </div>
-  );
+  </DragDropContext>
+);
 }
 
 export default Board;
