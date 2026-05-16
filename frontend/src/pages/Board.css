@@ -1,0 +1,214 @@
+/* Main container that holds the columns */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: #4691889b;
+  min-height: 100vh;
+}
+
+/* Column Style */
+.column {
+  background-color: #191919;
+  color: rgb(61, 61, 61);
+  font-weight: bold;
+  border-radius: 8px;
+  width: 300px;
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+/* Individual Card Style */
+.card {
+  background-color: #31312e;
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  cursor: pointer; 
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.card:hover {
+  background-color: #31312e;
+  border-color: #ffffff;
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.card h4 {
+  color: #cecfd2;
+  font-size: 15px;
+}
+
+.card-actions select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fafbfc;
+  color: #5e6c84;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.card-actions select:hover {
+  background-color: #ebecf0;
+}
+
+.card.pending { border-left-color: #f1c40f; }
+.card.in_progress { border-left-color: #2980b9; }
+.card.completed { border-left-color: #2ecc71; }
+
+/* Badge de status minimalista dentro do card */
+.status-badge {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  text-transform: uppercase;
+}
+.status-badge.pendente { background-color: #6b5a09; color: #f4f2ef; }
+.status-badge.em_progresso { background-color: #2980b9; color: #f4f2ef; }
+.status-badge.concluido { background-color: #2ecc71; color: #f4f2ef; }
+
+/* Botão Flutuante */
+.fab-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  
+  /* Largura automática baseada no texto */
+  padding: 0 25px; 
+  height: 55px;
+  
+  /* Formato de pílula arredondada */
+  border-radius: 50px; 
+  
+  background-color: #252929;
+  color: white;
+  
+  /* Ajuste de fonte para o texto caber bem */
+  font-size: 16px; 
+  font-weight: bold;
+  
+  /* Alinhamento central do ícone e texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  z-index: 999; /* Garante que fique acima das colunas */
+}
+
+/* Estilo específico para o símbolo de + */
+.fab-button span {
+  font-size: 24px;
+  line-height: 0;
+  margin-bottom: 2px;
+}
+
+.fab-button:hover {
+  transform: translateY(-5px); /* Efeito de levitação */
+  background-color: #393e42;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.fab-button:active {
+  transform: scale(0.95); 
+}
+/* Modal Overlay (Darkened background) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Model Window */
+.modal-content {
+  background: #2a2a2a;
+  padding: 25px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-content input, .modal-content textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: hsl(0, 84%, 66%);
+}
+
+.save-btn {
+  background-color: #3652da;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #2a41a8;
+}
+
+.delete-btn {
+  background-color: #ef4444; /* Vermelho */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: auto; /* Empurra os outros botões para a direita, separando o botão de excluir */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626; /* Vermelho mais escuro no hover */
+}

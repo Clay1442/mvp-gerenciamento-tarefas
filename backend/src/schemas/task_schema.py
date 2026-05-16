@@ -18,6 +18,7 @@ class TaskUpdate(BaseModel):
 class TaskResponse(BaseModel):
     id: int
     title: str
+    description: Optional[str] = None
     status: TaskStatus
 
 
