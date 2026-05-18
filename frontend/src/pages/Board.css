@@ -21,6 +21,10 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
+.column h2 {
+  color: rgb(224, 212, 212);
+}
+
 /* Individual Card Style */
 .card {
   background-color: #31312e;
