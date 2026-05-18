@@ -78,7 +78,7 @@ pip install -r requirements.txt
 # SECRET_KEY=sua_chave_secreta_aqui
 # ALGORITHM=HS256
 # ACCESS_TOKEN_EXPIRE_MINUTES=30
-# DATABASE_URL=sqlite:///./trello.db
+# DATABASE_URL=sqlite:sqlite:///../data/database.sqlite
 
 # Execute o servidor
 uvicorn src.main:app --reload
