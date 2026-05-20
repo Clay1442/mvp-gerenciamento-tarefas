@@ -8,6 +8,7 @@ Uma aplicação Full-Stack completa para gerenciamento dinâmico de tarefas atra
 
 * **🖥️ Frontend (Interface do Usuário):** [Acesse o Sistema na Vercel](https://mvp-gerenciamento-tarefas.vercel.app)
 * **⚙️ Backend (API Swagger):** [Explore e Teste a API no Render](https://mvp-gerenciamento-tarefas.onrender.com/docs)
+> ⚠️ **Nota importante sobre o carregamento:** Como o Backend está hospedado no plano gratuito do Render, o servidor entra em modo de repouso após 15 minutos de inatividade. Se a aplicação estiver há muito tempo sem uso, **o primeiro clique em "Cadastrar" ou "Entrar" pode demorar cerca de 1 minuto** para responder enquanto o servidor acorda. Por favor, aguarde a resposta da requisição. Os acessos seguintes serão instantâneos!
 
 ---
 
